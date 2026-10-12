@@ -1,6 +1,7 @@
 import { FlatList } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import styled from 'styled-components/native';
+import { Text } from "react-native";
 
 interface Category {
   id: string;
@@ -63,7 +64,36 @@ export default function App() {
         )}
         />
       
-      <ProductGrid />
+      <ProductGrid
+        data={products}
+        numColumns={2}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ProductCard>
+            <ProductImage source={{ uri: item.image }} />
+            <ProductInfo>
+              <ProductTitle>{item.name}</ProductTitle>
+              <ProductPrice>${item.price.toFixed(2)}</ProductPrice>
+              <ProductRating>Rating: {item.rating}</ProductRating>
+            </ProductInfo>
+          </ProductCard>
+        )}
+      />
+      <BottomBar>
+        <BottomBarButton>
+          <Text>Home</Text>
+        </BottomBarButton>
+        <BottomBarButton>
+          <Text>Search</Text>
+        </BottomBarButton>
+        <BottomBarButton>
+          <Text>Cart</Text>
+        </BottomBarButton>
+        <BottomBarButton>
+          <Text>Profile</Text>
+        </BottomBarButton>
+      </BottomBar>    
+      
     
       
       
@@ -74,7 +104,7 @@ export default function App() {
 
 const ScreenContainer = styled(SafeAreaView)`
   flex: 1;
-  background-color: #780404;
+  background-color: #14a765;
 `;
 
 const Header = styled.View`
@@ -113,7 +143,18 @@ const CategoryTitle = styled.Text`
 
 const ProductGrid = styled(FlatList<Product>)``;
 
-const ProductCard = styled.Pressable``;
+const ProductCard = styled.Pressable`
+  flex: 1;
+  margin: 8px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  shadow-color: #000;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 4px;
+  elevation: 2; 
+`;
 
 const ProductImage = styled.Image`
   width: 100%;
@@ -141,10 +182,6 @@ const ProductRating = styled.Text`
 `;  
 
 const BottomBar = styled.View`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   height: 60px;
   background-color: #fff;
   flex-direction: row;
@@ -156,7 +193,9 @@ const BottomBar = styled.View`
 
 const BottomBarButton = styled.Pressable`
   flex: 1;
+  justify-content: center;
   align-items: center;
+  
 `;     
 
 
