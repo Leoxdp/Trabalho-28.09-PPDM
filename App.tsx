@@ -2,6 +2,7 @@ import { FlatList } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import styled from 'styled-components/native';
 import { Text } from "react-native";
+import { useState } from "react";
 
 interface Category {
   id: string;
@@ -46,19 +47,23 @@ const products: Product[] = [
 
 
 export default function App() {
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
+  
   return (
     <SafeAreaProvider>
      <ScreenContainer>
       <Header>
-        <ScreenTitle>ABC</ScreenTitle>
-        <SearchInput placeholder="Search..." />
+        <ScreenTitle>FakeStore</ScreenTitle>
+        <SearchInput placeholder="Pesquisar..." />
       </Header>
       <CategoryList
         data={categories}
         horizontal
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <CategoryChip>
+          <CategoryChip
+            onPress={() => setCategoriaSelecionada(item.name)}
+          >
             <CategoryTitle>{item.name}</CategoryTitle>
           </CategoryChip>
         )}
@@ -73,30 +78,26 @@ export default function App() {
             <ProductImage source={{ uri: item.image }} />
             <ProductInfo>
               <ProductTitle>{item.name}</ProductTitle>
-              <ProductPrice>${item.price.toFixed(2)}</ProductPrice>
-              <ProductRating>Rating: {item.rating}</ProductRating>
+              <ProductPrice>R$ {item.price.toFixed(2).replace(".", ",")}</ProductPrice>
+              <ProductRating>★ {item.rating}</ProductRating>
             </ProductInfo>
           </ProductCard>
         )}
       />
       <BottomBar>
         <BottomBarButton>
-          <Text>Home</Text>
+          <Text>Início</Text>
         </BottomBarButton>
         <BottomBarButton>
-          <Text>Search</Text>
+          <Text>Pesquisa</Text>
         </BottomBarButton>
         <BottomBarButton>
-          <Text>Cart</Text>
+          <Text>Carrinho</Text>
         </BottomBarButton>
         <BottomBarButton>
-          <Text>Profile</Text>
+          <Text>Perfil</Text>
         </BottomBarButton>
       </BottomBar>    
-      
-    
-      
-      
      </ScreenContainer>
     </SafeAreaProvider>
   );
@@ -104,7 +105,7 @@ export default function App() {
 
 const ScreenContainer = styled(SafeAreaView)`
   flex: 1;
-  background-color: #14a765;
+  background-color: #ffffff;
 `;
 
 const Header = styled.View`
@@ -112,20 +113,23 @@ const Header = styled.View`
 `;
 
 const ScreenTitle = styled.Text`
-  color: #fff;
+  margin: 16px;
+  color: #000;
   font-size: 24px;
   font-weight: bold;  
 `;
 
 const SearchInput = styled.TextInput`
-  background-color: #fff;
-  border-radius: 8px;
-  border-color: #c4e717;
+  background-color: #ffffff;
+  border-width: 1px;
+  border-radius: 16px;
+  border-color: #000000;
   padding: 8px;
   margin: 16px;
 `;
 
 const CategoryList = styled(FlatList<Category>)`
+  flex-shrink: 0;
   margin: 16px;
 `;
 
@@ -141,7 +145,9 @@ const CategoryTitle = styled.Text`
   font-weight: bold;
 `;
 
-const ProductGrid = styled(FlatList<Product>)``;
+const ProductGrid = styled(FlatList<Product>)`
+  flex-shrink: 1;
+  margin: 16px;`;
 
 const ProductCard = styled.Pressable`
   flex: 1;
